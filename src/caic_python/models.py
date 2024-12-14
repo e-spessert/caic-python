@@ -138,7 +138,7 @@ class AvalancheForecast(pydantic.BaseModel):
     """A CAIC avalanche forecast."""
 
     id: str
-    title: str
+    title: str = None
     type: Literal["avalancheforecast"]
     polygons: list
     areaId: str
@@ -150,7 +150,7 @@ class AvalancheForecast(pydantic.BaseModel):
     avalancheSummary: ForecastSummary
     avalancheProblems: AvalancheProblems
     terrainAndTravelAdvice: dict
-    confidence: ForecastConfidences
+    confidence: ForecastConfidences = None
     communication: ForecastComms
     dangerRatings: DangerRatings
     media: ForecastMedia
