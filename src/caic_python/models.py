@@ -154,6 +154,11 @@ class AvalancheForecast(pydantic.BaseModel):
     communication: ForecastComms
     dangerRatings: DangerRatings
     media: ForecastMedia
+    region: str = None
+    region_overlap: bool = None
+
+    # def prep_to_plot(self):
+
 
 
 class RegionalDiscussionForecast(pydantic.BaseModel):
