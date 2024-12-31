@@ -7,6 +7,8 @@ import pydantic
 
 from . import enums
 from . import LOGGER
+import webbrowser
+import os
 
 
 class DetailObject(pydantic.BaseModel):
@@ -109,6 +111,31 @@ class DangerRating(pydantic.BaseModel):
     btl: str
     date: datetime.datetime
 
+    def str2num(self):
+        """Convert the danger ratings to numerical values.
+
+        This is useful for plotting.
+        """
+        dict = {"low": 1, "moderate": 2, "considerable": 3, "high": 4, "extreme": 5}
+        return dict.get(self.alp, 0), dict.get(self.tln, 0), dict.get(self.btl, 0)
+        
+    def highest(self, out_type= None):
+        """Return the highest danger rating for the day."""
+
+        danger_arr = self.str2num()
+        if out_type is None or out_type is int:
+            return max(danger_arr)
+        elif out_type is str:
+            return self.num2str(max(danger_arr))
+        else:
+            raise ValueError("Invalid out_type")
+
+    def num2str(self, num):
+        """Convert a numerical danger rating to a string.
+        """
+        dict = {1: "low", 2: "moderate", 3: "considerable", 4: "high", 5: "extreme"}
+        return dict.get(num, "unknown")
+
 
 class DangerRatings(pydantic.BaseModel):
     """A list of the avalanche danger ratings for the next few days."""
@@ -158,6 +185,19 @@ class AvalancheForecast(pydantic.BaseModel):
     region_overlap: bool = None
 
     # def prep_to_plot(self):
+
+    def show_images(self):
+        """Display the images attached to the forecast."""
+        urls = []
+        for image in self.media.Images:
+            urls.append(image.url)
+        # for url in urls:
+        #     webbrowser.open_new(url)
+        edge_path = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+        webbrowser.register('edge', None, webbrowser.BackgroundBrowser(edge_path))
+        os.system(edge_path)
+        for url in urls:
+            webbrowser.get('edge').open(url)
 
 
 
