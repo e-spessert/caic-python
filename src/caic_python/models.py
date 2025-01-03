@@ -195,7 +195,6 @@ class AvalancheForecast(pydantic.BaseModel):
         #     webbrowser.open_new(url)
         edge_path = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
         webbrowser.register('edge', None, webbrowser.BackgroundBrowser(edge_path))
-        os.system(edge_path)
         for url in urls:
             webbrowser.get('edge').open(url)
 
@@ -571,3 +570,9 @@ class FieldReport(pydantic.BaseModel):
     is_anonymous_location: Optional[bool] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+
+    def to_yaml(self, output_filepath):
+        """Create a yaml file of all the contents in the field report"""
+        import yaml
+        with open(output_filepath, 'w') as output_file:
+            yaml.dump(self.model_dump(), output_file)
